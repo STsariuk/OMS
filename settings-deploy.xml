@@ -1,0 +1,38 @@
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
+
+
+<!--<distributionManagement>
+   <snapshotRepository>
+      <id>maven-285-devops-proxy</id>
+      <url>http://class71-nexus.training.local:8081/repository/maven-285-devops-proxy</url>
+   </snapshotRepository>
+</distributionManagement> -->
+
+<servers>
+
+<server>
+
+    <id>maven-285-devops-proxy</id>
+      <username>nexus</username>
+      <password>nexus</password>
+
+</server>
+
+   <server>
+      <id>maven-285-devops-test</id>
+      <username>nexus</username>
+      <password>nexus</password>
+    </server>
+
+</servers>
+
+</settings>
+
+
+
+
+
+
+
