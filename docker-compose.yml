@@ -1,0 +1,66 @@
+version: '3.2'
+
+services:
+  maven-build:
+    container_name: mvn-build-cont
+    image: maven:3.5.2
+    volumes:
+      - type: volume
+        source: maven-vol
+        target: /usr/src/mymaven/target
+        volume:
+          nocopy: true
+      - type: bind
+        source: .
+        target: /usr/src/mymaven
+        # volume:
+        #   nocopy: true
+      # - $PWD:/usr/src/mymaven
+    working_dir: /usr/src/mymaven
+    command: ["mvn", "package"]
+    # depends_on:
+    #   - mysql-db
+    # build: .
+
+  tomcat-runtime:
+    container_name: tomcat-runtime-cont
+    volumes:
+      - type: volume
+        source: maven-vol
+        target: /usr/local/tomcat/webapps
+        volume:
+          nocopy: true
+      # - type: bind
+      #   source: ./target
+      #   target: /usr/local/tomcat/webapps
+    depends_on:
+      - maven-build
+    build:
+      context: .
+    # image: tomcat:7-alpine
+    
+    #  - /home/lv285-oms-docker/target:/usr/local/tomcat/webapps
+    # links:
+    #   - "maven-build"
+    #command: bash -c "while ping -c 1 maven-build &>/dev/null; do sleep 1; done; echo "maven-build finished"" && "/usr/local/tomcat/bin/catalina.sh run"
+    # working_dir: /usr/local/tomcat/webapps
+    # command: ["catalina.sh","run","&&","cp","$PWD/target/*.war", "/usr/local/tomcat/webapps"]
+    ports:
+      - 7878:8080
+    # restart: always
+
+volumes:
+  maven-vol: {}
+  
+  
+
+  # mysql-db:
+  #   container_name: mysql-db-cont
+  #   image: mysql:latest
+  #   environment:
+  #     MYSQL_ROOT_PASSWORD: 123456
+
+## -- For Linux --
+#   docker run -it --rm --name my-maven-project -v "$PWD":/usr/src/mymaven -w /usr/src/mymaven maven:3.5.2 mvn clean package -Dmaven.test.skip=true
+## -- For Windows --
+#   docker run -it --rm --name my-maven-project -v ${PWD}:/usr/src/mymaven -w /usr/src/mymaven maven:3.5.2 mvn clean package "-Dmaven.test.skip=true"
